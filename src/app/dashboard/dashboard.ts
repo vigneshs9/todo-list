@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header';
 import { TableComponent, TableHeader } from '../shared/table/table';
@@ -7,7 +7,7 @@ import { TextFieldComponent } from '../shared/text-field/text-field';
 import { DatepickerComponent } from '../shared/datepicker/datepicker';
 import { ApiManager } from '../utils/api-manager';
 import { Constants } from '../utils/constants';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 
 interface Todo {
@@ -26,16 +26,24 @@ export class DashboardComponent implements OnInit {
  todoTitle = '';
  todoDate = '';
  todoData: Todo[] = [];
- editId: number | null = null;
+ editId: string | null = null;
  tableHeaders: TableHeader[] = []
  openTodoModal: boolean = false;
  minDate: string = new Date().toISOString().split('T')[0];
- loginData: { userId: string, userName: string } | null = JSON.parse(localStorage.getItem('loginData') || 'null');
+ loginData: { userId: string, userName: string } | null = null;
  todo: Todo = { title: '', date: '' };
- isDataLoaded = false;
+ isLoading = true;
+ btnLable: string = 'Save'
+ constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  private readonly api = inject(ApiManager)
  ngOnInit() {
+  if (isPlatformBrowser(this.platformId)) {
+   this.loginData = JSON.parse(localStorage.getItem('loginData') || 'null');
+  }
   this.setupTable();
+  if (this.loginData?.userId) {
+   this.fetchTodos();
+  }
  }
  setupTable() {
   this.tableHeaders = [
@@ -44,25 +52,29 @@ export class DashboardComponent implements OnInit {
    { key: 'edit', label: 'Edit', action: 'edit', icon: 'fas fa-edit' },
    { key: 'delete', label: 'Delete', action: 'delete', icon: 'fas fa-trash' }
   ];
-  this.fetchTodos();
  }
  handleTableAction(event: any) {
   console.log('Table action:', event);
+  if (event.type === 'edit') {
+   this.editTodo(event.row);
+  } else if (event.type === 'delete') {
+   this.deleteTodo(event.row._id);
+  }
  }
  onAddTodo() {
   this.openTodoModal = true;
+  this.btnLable = 'Save'
  }
  saveTodo() {
-  console.log('Saving todo:', this.todo);
-   const payload = {
-    title: this.todo.title,
-    todoDate: this.todo.date,
-    userId: this.loginData?.userId
-  };
-  this.api.doPost(Constants.TODOS_ENDPOINT, payload ).subscribe({
+  const payload: any = { title: this.todo.title, date: this.todo.date, userId: this.loginData?.userId };
+  if (this.editId) {
+   payload['todoId'] = this.editId;
+  }
+  this.api[`${this.editId ? 'doPut' : 'doPost'}`](Constants.TODOS_ENDPOINT, payload).subscribe({
    next: (response) => {
-    console.log('Todo saved successfully:', response);
-    this.openTodoModal = false;
+    setTimeout(() => {
+     this.openTodoModal = false;
+    }, 500)
     this.fetchTodos();
    },
    error: (error) => {
@@ -71,20 +83,33 @@ export class DashboardComponent implements OnInit {
   });
  }
  fetchTodos() {
-  this.isDataLoaded = false;
-  this.api.doPost(Constants.TODOS_ENDPOINT + '/fetch', { userId: this.loginData?.userId }).subscribe({
+  this.isLoading = true;
+  this.api.doPost(Constants.FETCH_TODO, { userId: this.loginData?.userId }).subscribe({
    next: (res: any) => {
-    this.todoData = (res.data || []).map((item: any) => ({
-          title: item.title,
-          todoDateDMY: item.todoDateDMY  // 👈 EXACT MATCH
-        }));
-    console.log('Fetched todos:', this.todoData);
-     this.isDataLoaded = true;
+    this.todoData = res.data || []
+    this.isLoading = false;
    },
    error: (error) => {
-     this.isDataLoaded = true;
+    this.isLoading = false;
     console.error('Error fetching todos:', error);
    }
   });
+ }
+ deleteTodo(todoId: string) {
+  this.api.doPost(Constants.DELETE_TODO, { todoId }).subscribe({
+   next: () => {
+    this.fetchTodos();
+   },
+   error: (error) => {
+    console.error('Error deleting todo:', error);
+   }
+  });
+ }
+ editTodo(todo: any) {
+  const { title, todoDate } = todo;
+  this.todo = { title: title, date: new Date(todoDate).toISOString().split('T')[0] };
+  this.editId = todo._id;
+  this.openTodoModal = true;
+  this.btnLable = 'Update'
  }
 }
