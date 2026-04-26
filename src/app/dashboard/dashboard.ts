@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header';
 import { TableComponent, TableHeader } from '../shared/table/table';

@@ -1,8 +1,18 @@
 <header class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-  <h1 class="text-xl font-semibold">Todo Dashboard</h1>
+ <h1 class="text-xl font-semibold">Todo Dashboard</h1>
 
-  <div class="flex items-center gap-4">
-    <span class="font-medium">{{ username }}</span>
-    <i class="fas fa-user-circle text-3xl cursor-pointer"></i>
+ <div class="flex items-center gap-4">
+  <span class="font-medium">{{ username }}</span>
+  <i class="fas fa-user-circle text-3xl cursor-pointer" (click)="toggleMenu()"></i>
+  @if (isProfileClicked) {
+  <div class="absolute right-0 top-14 bg-white text-black rounded-lg shadow-lg w-44 z-50 text-gray-700">
+   <div class="absolute -top-3 right-8 w-4 h-4 bg-white rotate-45"></div>
+   <ul class="py-2">
+    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="onFileUpload()">Upload Profile</li>
+    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" (click)="changePassword()">Change Password</li>
+   </ul>
   </div>
+  }
+  <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)">
+ </div>
 </header>
