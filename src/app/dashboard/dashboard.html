@@ -9,22 +9,21 @@
    </button>
   </div>
   <!-- <app-table [headersInput]="tableHeaders" [dataInput]="todoData" (action)="handleTableAction($event)"></app-table> -->
-  @if (isLoading) {
+  @if (isLoading()) {
   <div class="text-center py-6 text-gray-500">
    Loading...
   </div>
   }
   @else {
-  @if (todoData.length === 0) {
+  @if (todoData().length === 0) {
   <div class="text-center py-6 text-gray-500">
    No records found
   </div>
   } @else {
-  <app-table [headersInput]="tableHeaders" [dataInput]="todoData" (action)="handleTableAction($event)">
+  <app-table [headersInput]="tableHeaders" [dataInput]="todoData()" (action)="handleTableAction($event)">
   </app-table>
   }
   }
-
  </div>
 </div>
 

@@ -1,4 +1,4 @@
-import { Component, Inject, inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header';
 import { TableComponent, TableHeader } from '../shared/table/table';
@@ -14,7 +14,7 @@ interface Todo {
  title: string;
  date: string;
  createdAt?: string;
- id?: string;
+ _id?: string;
 }
 @Component({
  selector: 'app-dashboard',
@@ -25,14 +25,14 @@ interface Todo {
 export class DashboardComponent implements OnInit {
  todoTitle = '';
  todoDate = '';
- todoData: Todo[] = [];
+ todoData = signal<Todo[]>([]);
  editId: string | null = null;
  tableHeaders: TableHeader[] = []
  openTodoModal: boolean = false;
  minDate: string = new Date().toISOString().split('T')[0];
  loginData: { userId: string, userName: string } | null = null;
  todo: Todo = { title: '', date: '' };
- isLoading = true;
+ isLoading = signal<boolean>(true);
  btnLable: string = 'Save'
  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  private readonly api = inject(ApiManager)
@@ -83,14 +83,14 @@ export class DashboardComponent implements OnInit {
   });
  }
  fetchTodos() {
-  this.isLoading = true;
+  this.isLoading.set(true);
   this.api.doPost(Constants.FETCH_TODO, { userId: this.loginData?.userId }).subscribe({
    next: (res: any) => {
-    this.todoData = res.data || []
-    this.isLoading = false;
+    this.todoData.set(res.data || []);
+    this.isLoading.set(false);
    },
    error: (error) => {
-    this.isLoading = false;
+    this.isLoading.set(false);
     console.error('Error fetching todos:', error);
    }
   });
