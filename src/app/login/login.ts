@@ -5,6 +5,7 @@ import { ApiManager } from '../utils/api-manager';
 import { Constants } from '../utils/constants';
 import { Router } from '@angular/router';
 import { MessageService } from '../utils/message.service';
+import { Utils } from '../utils/utils';
 
 @Component({
  selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent {
      if (!this.isLogin) {
       this.navigateToLogin();
      } else {
-      this.saveToLocalStorage({ userId: res.userId, name: res.userName });
+      Utils.saveToLocalStorage({ userId: res.userId, name: res.userName }, Constants.LS_LOGIN_DATA);
       setTimeout(() => {
        this.navigateToDashboard();
       }, 1000);  
@@ -68,9 +69,6 @@ export class LoginComponent {
  }
  clearForm() {
   this.postParams = { name: '', email: '', password: '' };
- }
- saveToLocalStorage(data: any) {
-  localStorage.setItem('loginData', JSON.stringify(data));
  }
  navigateToForgotPassword() {
   this.clearForm();

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ApiManager } from '../utils/api-manager';
 import { Constants } from '../utils/constants';
 import { MessageService } from '../utils/message.service';
+import { Utils } from '../utils/utils';
 @Component({
  selector: 'app-change-password',
  imports: [TextFieldComponent, ButtonComponent],
@@ -17,8 +18,8 @@ export class ChangePasswordComponent implements OnInit {
  private readonly api = inject(ApiManager);
  public readonly messageService = inject(MessageService);
  ngOnInit() {
-  const userData = JSON.parse(localStorage.getItem('loginData') || '{}');
-  this.postParams.name = userData.name;
+  const userData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
+  this.postParams.name = userData?.name;
  }
  closeChangePassword(isDashboard = false) {
   this.postParams = { oldPassword: '', newPassword: '' };

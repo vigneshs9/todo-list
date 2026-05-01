@@ -12,4 +12,8 @@ export class Constants {
  static readonly TODOS_ENDPOINT = Constants.BASE_URL + 'todos';
  static readonly FETCH_TODO = Constants.TODOS_ENDPOINT + '/fetch';
  static readonly DELETE_TODO = Constants.TODOS_ENDPOINT + '/delete';
+
+
+ // local storage key
+ static readonly LS_LOGIN_DATA = 'loginData';
 }

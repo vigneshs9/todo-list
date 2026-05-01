@@ -8,7 +8,8 @@ import { DatepickerComponent } from '../shared/datepicker/datepicker';
 import { ApiManager } from '../utils/api-manager';
 import { Constants } from '../utils/constants';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-
+import { Utils } from '../utils/utils';
+import { MessageService } from '../utils/message.service';
 
 interface Todo {
  title: string;
@@ -28,17 +29,19 @@ export class DashboardComponent implements OnInit {
  todoData = signal<Todo[]>([]);
  editId: string | null = null;
  tableHeaders: TableHeader[] = []
- openTodoModal: boolean = false;
+ openTodoModal = signal<boolean>(false);
  minDate: string = new Date().toISOString().split('T')[0];
  loginData: { userId: string, userName: string } | null = null;
- todo: Todo = { title: '', date: '' };
+ todo: Todo = { title: '', date: Utils.getYMD() };
  isLoading = signal<boolean>(true);
- btnLable: string = 'Save'
- constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
+ btnLable = signal<string>('Save');
  private readonly api = inject(ApiManager)
+ public readonly messageService = inject(MessageService);
+ 
+ constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  ngOnInit() {
   if (isPlatformBrowser(this.platformId)) {
-   this.loginData = JSON.parse(localStorage.getItem('loginData') || 'null');
+   this.loginData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
   }
   this.setupTable();
   if (this.loginData?.userId) {
@@ -62,10 +65,11 @@ export class DashboardComponent implements OnInit {
   }
  }
  onAddTodo() {
-  this.openTodoModal = true;
-  this.btnLable = 'Save'
+  this.openTodoModal.set(true);
+  this.btnLable.set('Save');
  }
  saveTodo() {
+  if (!this.isValidForm()) return;
   const payload: any = { title: this.todo.title, date: this.todo.date, userId: this.loginData?.userId };
   if (this.editId) {
    payload['todoId'] = this.editId;
@@ -73,7 +77,7 @@ export class DashboardComponent implements OnInit {
   this.api[`${this.editId ? 'doPut' : 'doPost'}`](Constants.TODOS_ENDPOINT, payload).subscribe({
    next: (response) => {
     setTimeout(() => {
-     this.openTodoModal = false;
+     this.openTodoModal.set(false);
     }, 500)
     this.fetchTodos();
    },
@@ -96,20 +100,33 @@ export class DashboardComponent implements OnInit {
   });
  }
  deleteTodo(todoId: string) {
-  this.api.doPost(Constants.DELETE_TODO, { todoId }).subscribe({
-   next: () => {
-    this.fetchTodos();
-   },
-   error: (error) => {
-    console.error('Error deleting todo:', error);
-   }
-  });
+  if (confirm('Are you sure you want to delete this todo?')) {
+   this.api.doPost(Constants.DELETE_TODO, { todoId }).subscribe({
+    next: () => {
+     this.fetchTodos();
+    },
+    error: (error) => {
+     console.error('Error deleting todo:', error);
+    }
+   });
+  }
  }
  editTodo(todo: any) {
   const { title, todoDate } = todo;
-  this.todo = { title: title, date: new Date(todoDate).toISOString().split('T')[0] };
+  this.todo = { title: title, date: Utils.getYMD(todoDate) };
   this.editId = todo._id;
-  this.openTodoModal = true;
-  this.btnLable = 'Update'
+  this.openTodoModal.set(true);
+  this.btnLable.set('Update');
+ }
+ isValidForm(): boolean {
+  if (!this.todo.title) {
+   this.messageService.showMessage('Title is required');
+   return false;
+  }
+  if (!this.todo.date) {
+   this.messageService.showMessage('Date is required');
+   return false;
+  }
+  return true;
  }
 }
