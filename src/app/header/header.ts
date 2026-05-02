@@ -45,4 +45,8 @@ export class HeaderComponent {
    this.isProfileClicked.set(false)
   })
  }
+ logout() {
+  Utils.removeFromLocalStorage(Constants.LS_LOGIN_DATA);
+  this.router.navigate(['/login']);
+ }
 }

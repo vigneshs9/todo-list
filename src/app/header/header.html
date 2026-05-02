@@ -4,6 +4,7 @@
  <div class="flex items-center gap-4">
   <span class="font-medium">{{ username }}</span>
   <i class="fas fa-user-circle text-3xl cursor-pointer custom-close" (click)="toggleMenu()"></i>
+  <i class="fas fa-sign-out-alt text-2xl cursor-pointer" (click)="logout()" title="Logout"></i>
   @if (isProfileClicked()) {
   <div class="absolute right-0 top-14 bg-white text-black rounded-lg shadow-lg w-44 z-50 text-gray-700 custom-close">
    <div class="absolute -top-3 right-8 w-4 h-4 bg-white rotate-45"></div>
