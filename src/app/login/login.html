@@ -9,7 +9,7 @@
   </app-text-field>
 
   <div class="mt-4">
-   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password">
+   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password" (keydown.enter)="login()">
    </app-text-field>
   </div>
 
@@ -45,7 +45,7 @@
   </div>
 
   <div class="mt-4">
-   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password">
+   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password" (keydown.enter)="login()">
    </app-text-field>
   </div>
   @if (messageService.message().status) {

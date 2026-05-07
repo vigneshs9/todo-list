@@ -32,12 +32,19 @@ export class LoginComponent {
       Utils.saveToLocalStorage({ userId: res.userId, name: res.userName }, Constants.LS_LOGIN_DATA);
       setTimeout(() => {
        this.navigateToDashboard();
-      }, 1000);  
+      }, 1000);
      }
     }
    },
    error: (err: any) => {
-    this.messageService.showMessage(err.error.message || 'Request failed');
+    if (err?.error?.message.includes('name_1')) {
+     this.messageService.showMessage('User with this name already exists');
+     return;
+    } else if (err?.error?.message.includes('email_1')) {
+     this.messageService.showMessage('User with this email already exists');
+     return;
+    }
+    else this.messageService.showMessage(err.error.message || 'Request failed');
    }
   });
  }
