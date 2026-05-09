@@ -29,7 +29,7 @@ export class LoginComponent {
      if (!this.isLogin) {
       this.navigateToLogin();
      } else {
-      Utils.saveToLocalStorage({ userId: res.userId, name: res.userName }, Constants.LS_LOGIN_DATA);
+      Utils.saveToLocalStorage({ userId: res.userId, name: res.userName, profilePath: res.profilePath }, Constants.LS_LOGIN_DATA);
       setTimeout(() => {
        this.navigateToDashboard();
       }, 1000);

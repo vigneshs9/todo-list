@@ -18,4 +18,7 @@ export class ApiManager {
  doGet(url: string) {
   return this.http.get(url);
  }
+ uploadFile(url: string, file: File) {
+  return this.http.put(url, file, { headers: { 'Content-Type': file.type } });
+ }
 }
