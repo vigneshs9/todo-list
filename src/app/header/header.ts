@@ -53,6 +53,7 @@ export class HeaderComponent {
     this.uploadToS3(file, signedUrl);
     this.api.doPost(Constants.UPLOAD_PROFILE_ENDPOINT, { userId: this.userId(), filePath: uploadParams.filePath }).subscribe({
      next: (res1: any) => {
+      this.getSignedUrl(uploadParams.filePath);
       console.log('Profile updated successfully:', res1);
      },
      error: (err) => {
