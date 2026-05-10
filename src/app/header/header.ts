@@ -45,13 +45,13 @@ export class HeaderComponent {
  }
  onFileSelected(event: any) {
   const file: File = event.target.files[0];
-  const uploadParams = { fileName: file.name, fileType: file.type, filePath: `demo/${this.userId}_${file.name}` }
+  const uploadParams = { fileName: file.name, fileType: file.type, filePath: `demo/${this.userId()}_${file.name}` }
   this.api.doPost(Constants.UPLOAD_SIGNED_URL, uploadParams).subscribe({
    next: (res: any) => {
     const signedUrl = res.signedUrl;
     console.log('Fetched signed URL:', signedUrl);
     this.uploadToS3(file, signedUrl);
-    this.api.doPost(Constants.UPLOAD_PROFILE_ENDPOINT, { userId: this.userId, filePath: uploadParams.filePath }).subscribe({
+    this.api.doPost(Constants.UPLOAD_PROFILE_ENDPOINT, { userId: this.userId(), filePath: uploadParams.filePath }).subscribe({
      next: (res1: any) => {
       console.log('Profile updated successfully:', res1);
      },
