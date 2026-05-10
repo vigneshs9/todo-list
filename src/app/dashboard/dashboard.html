@@ -29,7 +29,8 @@
 
 @if (openTodoModal()) {
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
- <div class="bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
+ <div class="relative bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
+  <i class="fas fa-circle-xmark cursor-pointer absolute top-4 right-4" (click)="openTodoModal.set(false)"></i>
   <h3 class="text-lg font-semibold mb-4">{{ btnLable() == 'Save' ? 'Add Todo' : 'Edit Todo' }}</h3>
   <div class="mb-4">
    <app-text-field label="Todo Name" placeholder="Enter todo name" [(value)]="todo.title"></app-text-field>

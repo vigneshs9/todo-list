@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { OutsideClick } from '../utils/outside-click';
 import { Constants } from '../utils/constants';
 import { Utils } from '../utils/utils';
+import { ApiManager } from '../utils/api-manager';
 @Component({
  selector: 'app-header',
  standalone: true,
@@ -11,17 +12,23 @@ import { Utils } from '../utils/utils';
 })
 export class HeaderComponent {
  @ViewChild('fileInput') fileInput!: ElementRef;
- username: string = '';
- isProfileClicked = signal(false);
- isChangePassword = signal(false);
+ username = signal<string>('');
+ isProfileClicked = signal<boolean>(false);
+ isChangePassword = signal<boolean>(false);
+ userId = signal<string>('');
+ profileUrl = signal<string>('');
  private readonly router = inject(Router);
  private readonly outsideClickService = inject(OutsideClick);
+ private readonly api = inject(ApiManager)
  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  ngOnInit() {
   if (isPlatformBrowser(this.platformId)) {
    const loginData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
-   this.username = loginData?.name || '';
+   this.username.set(loginData?.name || '');
+   this.userId.set(loginData?.userId || '');
    this.outsideClick()
+   if (loginData?.profilePath)
+    this.getSignedUrl(loginData?.profilePath);
   }
  }
  toggleMenu() {
@@ -30,7 +37,7 @@ export class HeaderComponent {
  onFileUpload() {
   this.fileInput.nativeElement.click();
   this.isProfileClicked.set(false);
-  console.log('File upload clicked', this.fileInput.nativeElement.files[0]);
+  console.log('File upload clicked', this.fileInput.nativeElement);
  }
  changePassword() {
   this.isProfileClicked.set(false);
@@ -38,6 +45,24 @@ export class HeaderComponent {
  }
  onFileSelected(event: any) {
   const file: File = event.target.files[0];
+  const uploadParams = { fileName: file.name, fileType: file.type, filePath: `demo/${this.userId}_${file.name}` }
+  this.api.doPost(Constants.UPLOAD_SIGNED_URL, uploadParams).subscribe({
+   next: (res: any) => {
+    const signedUrl = res.signedUrl;
+    console.log('Fetched signed URL:', signedUrl);
+    this.uploadToS3(file, signedUrl);
+    this.api.doPost(Constants.UPLOAD_PROFILE_ENDPOINT, { userId: this.userId, filePath: uploadParams.filePath }).subscribe({
+     next: (res1: any) => {
+      console.log('Profile updated successfully:', res1);
+     },
+     error: (err) => {
+      console.error('Error updating profile:', err);
+     }
+    })
+   }, error: (err) => {
+    console.error('Error fetching signed URL:', err);
+   }
+  })
   console.log('Selected file:', file);
  }
  outsideClick() {
@@ -48,5 +73,31 @@ export class HeaderComponent {
  logout() {
   Utils.removeFromLocalStorage(Constants.LS_LOGIN_DATA);
   this.router.navigate(['/login']);
+ }
+ uploadToS3(file: File, signedUrl: string) {
+  this.api.uploadFile(signedUrl, file).subscribe({
+   next: (res) => {
+    console.log('File uploaded successfully:', res);
+   },
+   error: (err) => {
+    console.error('Error uploading file:', err);
+   }
+  })
+ }
+ getSignedUrl(filePath: string) {
+  this.api.doPost(Constants.GET_SIGNED_URL, { filePath }).subscribe({
+   next: (res: any) => {
+    const signedUrl = res.signedUrl;
+    console.log('Fetched signed URL for profile picture:', signedUrl);
+    this.profileUrl.set(signedUrl);
+   }, error: (err) => {
+    console.error('Error fetching signed URL for profile picture:', err);
+   }
+  })
+ }
+ viewProfile() {
+  if (this.profileUrl()) {
+   window.open(this.profileUrl(), '_blank');
+  }
  }
 }
