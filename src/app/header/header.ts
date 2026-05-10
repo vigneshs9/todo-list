@@ -13,10 +13,10 @@ import { ApiManager } from '../utils/api-manager';
 export class HeaderComponent {
  @ViewChild('fileInput') fileInput!: ElementRef;
  username = signal<string>('');
- isProfileClicked = signal(false);
- isChangePassword = signal(false);
+ isProfileClicked = signal<boolean>(false);
+ isChangePassword = signal<boolean>(false);
  userId = signal<string>('');
- profileUrl = signal(null);
+ profileUrl = signal<string>('');
  private readonly router = inject(Router);
  private readonly outsideClickService = inject(OutsideClick);
  private readonly api = inject(ApiManager)
@@ -94,5 +94,10 @@ export class HeaderComponent {
     console.error('Error fetching signed URL for profile picture:', err);
    }
   })
+ }
+ viewProfile() {
+  if (this.profileUrl()) {
+   window.open(this.profileUrl(), '_blank');
+  }
  }
 }
