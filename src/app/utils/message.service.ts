@@ -12,4 +12,8 @@ export class MessageService {
    this.message.set({ status: false, text: '', isError: true });
   }, 2000);
  }
+
+ clearMessage() {
+  this.message.set({ status: false, text: '', isError: true });
+ }
 }

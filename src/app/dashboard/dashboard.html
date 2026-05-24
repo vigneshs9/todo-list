@@ -36,7 +36,10 @@
    <app-text-field label="Todo Name" placeholder="Enter todo name" [(value)]="todo.title"></app-text-field>
   </div>
   <div class="mb-4">
-   <app-datepicker label="Select Date" [(value)]="todo.date" [min]="minDate"></app-datepicker>
+   <app-datepicker label="Due Date" [(value)]="todo.date" [min]="minDate"></app-datepicker>
+  </div>
+  <div class="mb-4">
+   <app-textarea label="Description" placeholder="Enter description" [(value)]="todo.description"></app-textarea>
   </div>
   @if (messageService.message().status) {
   <p [class]="messageService.message().isError ? 'text-sm text-red-600 mt-2' : 'text-sm text-green-600 mt-2'">

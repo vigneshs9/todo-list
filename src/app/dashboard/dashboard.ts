@@ -10,17 +10,19 @@ import { Constants } from '../utils/constants';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Utils } from '../utils/utils';
 import { MessageService } from '../utils/message.service';
+import { TextareaComponent } from '../shared/textarea/textarea';
 
 interface Todo {
  title: string;
  date: string;
  createdAt?: string;
  _id?: string;
+ description: string;
 }
 @Component({
  selector: 'app-dashboard',
  standalone: true,
- imports: [FormsModule, HeaderComponent, TableComponent, ButtonComponent, TextFieldComponent, DatepickerComponent, CommonModule],
+ imports: [FormsModule, HeaderComponent, TableComponent, ButtonComponent, TextFieldComponent, DatepickerComponent, CommonModule, TextareaComponent],
  templateUrl: './dashboard.html'
 })
 export class DashboardComponent implements OnInit {
@@ -32,7 +34,7 @@ export class DashboardComponent implements OnInit {
  openTodoModal = signal<boolean>(false);
  minDate: string = new Date().toISOString().split('T')[0];
  loginData: { userId: string, userName: string } | null = null;
- todo: Todo = { title: '', date: Utils.getYMD() };
+ todo: Todo = { title: '', date: Utils.getYMD(), description: '' };
  isLoading = signal<boolean>(true);
  btnLable = signal<string>('Save');
  private readonly api = inject(ApiManager)
@@ -70,7 +72,7 @@ export class DashboardComponent implements OnInit {
  }
  saveTodo() {
   if (!this.isValidForm()) return;
-  const payload: any = { title: this.todo.title, date: this.todo.date, userId: this.loginData?.userId };
+  const payload: any = { title: this.todo.title, date: this.todo.date, userId: this.loginData?.userId, description: this.todo.description };
   if (this.editId) {
    payload['todoId'] = this.editId;
   }
@@ -112,8 +114,8 @@ export class DashboardComponent implements OnInit {
   }
  }
  editTodo(todo: any) {
-  const { title, todoDate } = todo;
-  this.todo = { title: title, date: Utils.getYMD(todoDate) };
+  const { title, todoDate, description } = todo;
+  this.todo = { title, date: Utils.getYMD(todoDate), description };
   this.editId = todo._id;
   this.openTodoModal.set(true);
   this.btnLable.set('Update');
@@ -125,6 +127,10 @@ export class DashboardComponent implements OnInit {
   }
   if (!this.todo.date) {
    this.messageService.showMessage('Date is required');
+   return false;
+  }
+  if (!this.todo.description) {
+   this.messageService.showMessage('Description is required');
    return false;
   }
   return true;
