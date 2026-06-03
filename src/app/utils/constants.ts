@@ -14,6 +14,7 @@ export class Constants {
  static readonly CHANGE_PASSWORD_ENDPOINT = Constants.LOGIN_ENDPOINT + '/changePassword';
  static readonly FORGOT_PASSWORD_ENDPOINT = Constants.LOGIN_ENDPOINT + '/forgotPassword';
  static readonly UPLOAD_PROFILE_ENDPOINT = Constants.LOGIN_ENDPOINT + '/uploadProfile';
+ static readonly FETCH_USER_ENDPOINT = Constants.LOGIN_ENDPOINT + '/fetch';
  static readonly FETCH_TODO = Constants.TODOS_ENDPOINT + '/fetch';
  static readonly DELETE_TODO = Constants.TODOS_ENDPOINT + '/delete';
  static readonly SEND_OTP = Constants.OTP_ENDPOINT + '/sendOTP';

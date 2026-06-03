@@ -49,11 +49,9 @@ export class HeaderComponent {
   this.api.doPost(Constants.UPLOAD_SIGNED_URL, uploadParams).subscribe({
    next: (res: any) => {
     const signedUrl = res.signedUrl;
-    console.log('Fetched signed URL:', signedUrl);
     this.uploadToS3(file, signedUrl);
     this.api.doPost(Constants.UPLOAD_PROFILE_ENDPOINT, { userId: this.userId, filePath: uploadParams.filePath }).subscribe({
      next: (res1: any) => {
-      console.log('Profile updated successfully:', res1);
      },
      error: (err) => {
       console.error('Error updating profile:', err);
@@ -63,7 +61,6 @@ export class HeaderComponent {
     console.error('Error fetching signed URL:', err);
    }
   })
-  console.log('Selected file:', file);
  }
  outsideClick() {
   this.outsideClickService.clickOutsideEmitter.subscribe(() => {

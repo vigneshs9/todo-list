@@ -1,6 +1,6 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
  <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-  @if (isLogin) {
+  @if (isLogin()) {
   <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
    Login
   </h2>
@@ -36,7 +36,7 @@
    Sign Up
   </h2>
 
-  <app-text-field label="User Name" placeholder="Enter your name" [(value)]="postParams.name">
+  <app-text-field label="User Name" placeholder="Enter your name" [(value)]="postParams.name" (valueChange)="onTextChange($event, 'name')" [error]="signupError()">
   </app-text-field>
 
   <div class="mt-4">
@@ -45,8 +45,25 @@
   </div>
 
   <div class="mt-4">
-   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password" (keydown.enter)="login()">
+   <app-text-field label="Password" type="password" placeholder="Enter your password" [(value)]="postParams.password" (keydown.enter)="login()" (inputValueChange)="onPasswordChange($event)" (valueChange)="onTextChange($event, 'password')" [error]="passwordError()">
    </app-text-field>
+   <div class="mt-2 space-y-1 text-xs">
+    <p [class]="passwordValidations().hasMinLength ? 'text-green-600' : 'text-gray-700'">
+     ✓ At least 8 characters
+    </p>
+    <p [class]="passwordValidations().hasUpperCase ? 'text-green-600' : 'text-gray-700'">
+     ✓ At least 1 uppercase letter (A-Z)
+    </p>
+    <p [class]="passwordValidations().hasLowerCase ? 'text-green-600' : 'text-gray-700'">
+     ✓ At least 1 lowercase letter (a-z)
+    </p>
+    <p [class]="passwordValidations().hasNumber ? 'text-green-600' : 'text-gray-700'">
+     ✓ At least 1 number (0-9)
+    </p>
+    <p [class]="passwordValidations().hasSpecialChar ? 'text-green-600' : 'text-gray-700'">
+     ✓ At least 1 special character (!@#$%^&*()...)
+    </p>
+   </div>
   </div>
   @if (messageService.message().status) {
   <p [class]="messageService.message().isError ? 'text-sm text-red-600 mt-2' : 'text-sm text-green-600 mt-2'">
