@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Constants } from './constants';
 
 @Injectable({
  providedIn: 'root',
@@ -16,5 +17,9 @@ export class Utils {
  }
  static removeFromLocalStorage(lsKey: string) {
   localStorage.removeItem(lsKey);
+ }
+ static doLogout() {
+  Utils.removeFromLocalStorage(Constants.LS_LOGIN_DATA);
+  Utils.removeFromLocalStorage(Constants.LS_TOKEN);
  }
 }

@@ -24,4 +24,5 @@ export class Constants {
 
  // local storage key
  static readonly LS_LOGIN_DATA = 'loginData';
+ static readonly LS_TOKEN = 'lsToken';
 }
