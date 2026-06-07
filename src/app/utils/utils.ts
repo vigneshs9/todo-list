@@ -22,4 +22,12 @@ export class Utils {
   Utils.removeFromLocalStorage(Constants.LS_LOGIN_DATA);
   Utils.removeFromLocalStorage(Constants.LS_TOKEN);
  }
+ static convertDMYToYMD(dateStr: string): string {
+  const [day, month, year] = dateStr.split('/');
+  return `${year}-${month}-${day}`;
+ }
+ static convertYMDToDMY(dateStr: string): string {
+  const [year, month, day] = dateStr.split('-');
+  return `${day}/${month}/${year}`;
+ }
 }

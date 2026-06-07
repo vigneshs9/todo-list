@@ -19,12 +19,11 @@
    <tr class="border-b hover:bg-gray-50">
     @for (header of headers(); track header.key) {
     <td class="px-6 py-4 text-center">
-     @if (!header.action) {
-     {{ row[header.key] }}
-     }
      @if (header.action === 'edit') {
-     <i class="fas fa-edit text-blue-600 cursor-pointer hover:text-blue-800" (click)="emitAction('edit', row)">
-     </i>
+      @if (row.canEdit !== false) {
+      <i class="fas fa-edit text-blue-600 cursor-pointer hover:text-blue-800" (click)="emitAction('edit', row)">
+      </i>
+      }
      }
      @if (header.action === 'delete') {
      <i class="fas fa-trash text-red-600 cursor-pointer hover:text-red-800" (click)="emitAction('delete', row)">
@@ -33,6 +32,16 @@
      @if (header.action === 'view') {
      <i class="fas fa-eye text-gray-500 cursor-pointer hover:text-gray-700" (click)="emitAction('view', row)">
      </i>
+     }
+     @if (!header.action) {
+      @if (header.classKey && row[header.classKey]) {
+      <span [class]="row[header.classKey]">
+       {{ row[header.key] }}
+      </span>
+      }
+      @else {
+      {{ row[header.key] }}
+      }
      }
     </td>
     }
