@@ -1,0 +1,27 @@
+<div class="relative inline-block text-left w-64">
+ <button (click)="toggle($event)" [class]="'w-full flex items-center justify-between px-4 py-2 rounded-lg transition focus:outline-none ' + (disabled ? 'opacity-50 cursor-not-allowed' : 'bg-white ring-1 ring-gray-200 hover:shadow')">
+  <span class="text-sm text-gray-700">{{ selected?.label || placeholder }}</span>
+  <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+ </button>
+
+ @if (isOpen) {
+  <div class="absolute z-50 mt-2 w-full bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+   <ul class="max-h-56 overflow-auto py-1">
+    @for (opt of options; track opt.value) {
+     <li (click)="select(opt, $event)" class="px-4 py-2 cursor-pointer hover:bg-blue-50">
+      <div class="flex items-center">
+       <span class="flex-1 text-sm text-gray-700">{{ opt.label }}</span>
+       @if (selectedValue === opt.value) {
+        <span class="w-4 h-4 bg-blue-600 rounded-full"></span>
+       }
+      </div>
+     </li>
+    }
+    @if (options.length === 0) {
+     <li class="px-4 py-2 text-sm text-gray-500">No options</li>
+    }
+   </ul>
+  </div>
+ }
+
+</div>

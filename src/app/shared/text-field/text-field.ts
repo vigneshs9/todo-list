@@ -12,9 +12,14 @@ export class TextFieldComponent {
  @Input() error: string = '';
  @Input() disabled: boolean = false;
  @Output() valueChange = new EventEmitter<string>();
+ @Output() inputValueChange = new EventEmitter<string>();
 
- onInput(event: Event) {
+ onBlur(event: Event) {
   const input = event.target as HTMLInputElement;
   this.valueChange.emit(input.value);
+ }
+ onInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  this.inputValueChange.emit(input.value);
  }
 }

@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
  templateUrl: './datepicker.html'
 })
 export class DatepickerComponent {
- @Input() label: string = '';
+ @Input() label: string = 'Due Date';
  @Input() value: string = '';
  @Input() min?: string;
  @Input() max?: string;

@@ -28,22 +28,62 @@
 </div>
 
 @if (openTodoModal()) {
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
- <div class="relative bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
-  <i class="fas fa-circle-xmark cursor-pointer absolute top-4 right-4" (click)="openTodoModal.set(false)"></i>
-  <h3 class="text-lg font-semibold mb-4">{{ btnLable() == 'Save' ? 'Add Todo' : 'Edit Todo' }}</h3>
-  <div class="mb-4">
-   <app-text-field label="Todo Name" placeholder="Enter todo name" [(value)]="todo.title"></app-text-field>
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+ <div
+  class="relative bg-white rounded-xl w-full max-w-[450px] max-h-[70vh] flex flex-col overflow-hidden shadow-xl">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-6 py-4 shrink-0">
+   <h3 class="text-lg font-semibold">
+    {{ btnLable() == 'Save' ? 'Add Todo' : 'Edit Todo' }}
+   </h3>
+
+   <i class="fas fa-circle-xmark cursor-pointer text-lg" (click)="openTodoModal.set(false)">
+   </i>
   </div>
-  <div class="mb-4">
-   <app-datepicker label="Select Date" [(value)]="todo.date" [min]="minDate"></app-datepicker>
+
+  <!-- Scrollable Content -->
+  <div class="flex-1 overflow-y-auto px-6 py-4">
+   <div class="mb-3">
+    <app-text-field label="Todo Name" placeholder="Enter todo name" [(value)]="todo.title">
+    </app-text-field>
+   </div>
+
+   <div class="mb-3">
+    <app-datepicker label="Due Date" [(value)]="todo.date" [min]="minDate">
+    </app-datepicker>
+   </div>
+
+   <div class="mb-3">
+    <app-textarea label="Description" placeholder="Enter description" [(value)]="todo.description">
+    </app-textarea>
+   </div>
+
+   <div class="mb-3">
+    <label class="text-sm font-medium text-slate-700 mb-2 block">
+     Task Status
+    </label>
+
+    <app-dropdown [options]="taskStatus()" [selectedValue]="todo.taskStatus" placeholder="Choose status"
+     (selectionChange)="todo.taskStatus = $event">
+    </app-dropdown>
+   </div>
+
+   <div class="mb-3">
+    <label class="text-sm font-medium text-slate-700 mb-2 block">
+     Priority
+    </label>
+
+    <app-radio-button [options]="priorityOptions" [selectedValue]="todo.priority" (selectionChange)="todo.priority = $event">
+    </app-radio-button>
+   </div>
+   @if (messageService.message().status) {
+   <p [class]="messageService.message().isError ? 'text-sm text-red-600 mt-2' : 'text-sm text-green-600 mt-2'">
+    {{ messageService.message().text }}
+   </p>
+   }
   </div>
-  @if (messageService.message().status) {
-  <p [class]="messageService.message().isError ? 'text-sm text-red-600 mt-2' : 'text-sm text-green-600 mt-2'">
-   {{ messageService.message().text }}
-  </p>
-  }
-  <div class="mt-6 flex justify-center">
+  <!-- Footer -->
+  <div class="flex justify-center gap-3 px-6 py-4 bg-white shrink-0">
    <app-button label="Cancel" variant="tertiary" (clicked)="openTodoModal.set(false)"></app-button>
    <app-button [label]="btnLable()" variant="primary" (clicked)="saveTodo()"></app-button>
   </div>

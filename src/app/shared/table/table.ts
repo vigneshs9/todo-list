@@ -8,6 +8,7 @@ export interface TableHeader {
  label: string;
  icon?: string;
  action?: TableAction;
+ classKey?: string;
 }
 
 @Component({
