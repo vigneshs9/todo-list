@@ -120,11 +120,11 @@ export class DashboardComponent implements OnInit {
      todo.priorityLabel = priorityObj ? priorityObj.label : '';
      todo.priorityClass = priorityObj ? priorityObj.class : '';
      const isOverdue = new Date(todo.todoDate) < new Date() && todo.taskStatus !== 3;
-     if (isOverdue && todo.taskStatus !== 3) {
+     if (isOverdue) {
       todo.taskStatusLabel = 'Overdue';
       todo.taskStatusClass = 'inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold bg-red-100 text-red-800 border border-red-200';
-      todo.canEdit = false;
      }
+     todo.canEdit = !isOverdue && todo.taskStatus !== 3;
     })
 
     this.todoData.set(todos);
