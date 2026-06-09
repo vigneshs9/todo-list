@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
  selector: 'app-dropdown',
  standalone: true,
  imports: [],
+ changeDetection: ChangeDetectionStrategy.Eager,
  templateUrl: './dropdown.html'
 })
 export class DropdownComponent {

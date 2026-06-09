@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type TableAction = 'view' | 'edit' | 'delete';
@@ -15,6 +15,7 @@ export interface TableHeader {
  selector: 'app-table',
  standalone: true,
  imports: [CommonModule],
+ changeDetection: ChangeDetectionStrategy.Eager,
  templateUrl: './table.html'
 })
 export class TableComponent {

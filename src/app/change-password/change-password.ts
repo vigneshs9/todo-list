@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TextFieldComponent } from '../shared/text-field/text-field';
 import { ButtonComponent } from '../shared/button/button';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { Utils } from '../utils/utils';
  selector: 'app-change-password',
  imports: [TextFieldComponent, ButtonComponent],
  templateUrl: './change-password.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  styleUrl: './change-password.css',
 })
 export class ChangePasswordComponent implements OnInit {

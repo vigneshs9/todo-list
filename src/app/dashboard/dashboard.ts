@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, Inject, inject, OnInit, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header';
 import { TableComponent, TableHeader } from '../shared/table/table';
@@ -27,6 +27,7 @@ interface Todo {
  selector: 'app-dashboard',
  standalone: true,
  imports: [FormsModule, HeaderComponent, TableComponent, ButtonComponent, TextFieldComponent, DatepickerComponent, CommonModule, TextareaComponent, DropdownComponent, RadioButtonComponent],
+ changeDetection: ChangeDetectionStrategy.Eager,
  templateUrl: './dashboard.html'
 })
 export class DashboardComponent implements OnInit {

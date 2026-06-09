@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TextFieldComponent } from '../shared/text-field/text-field';
 import { ButtonComponent } from '../shared/button/button';
 import { ApiManager } from '../utils/api-manager';
@@ -11,6 +11,7 @@ import { Utils } from '../utils/utils';
  selector: 'app-login',
  standalone: true,
  templateUrl: './login.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  imports: [TextFieldComponent, ButtonComponent]
 })
 export class LoginComponent {

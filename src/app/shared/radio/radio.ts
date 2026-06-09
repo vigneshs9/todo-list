@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
  selector: 'app-radio-button',
  standalone: true,
  imports: [],
+ changeDetection: ChangeDetectionStrategy.Eager,
  templateUrl: './radio.html',
 })
 export class RadioButtonComponent {

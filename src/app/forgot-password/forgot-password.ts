@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, signal, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, QueryList, signal, ViewChildren, ChangeDetectionStrategy } from '@angular/core';
 import { TextFieldComponent } from '../shared/text-field/text-field';
 import { ButtonComponent } from '../shared/button/button';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { MessageService } from '../utils/message.service';
  selector: 'app-forgot-password',
  imports: [TextFieldComponent, ButtonComponent],
  templateUrl: './forgot-password.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  styleUrl: './forgot-password.css',
 })
 export class ForgotPasswordComponent {

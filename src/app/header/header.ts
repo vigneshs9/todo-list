@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, ElementRef, inject, Inject, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Inject, PLATFORM_ID, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { OutsideClick } from '../utils/outside-click';
 import { Constants } from '../utils/constants';
@@ -8,6 +8,7 @@ import { ApiManager } from '../utils/api-manager';
 @Component({
  selector: 'app-header',
  standalone: true,
+ changeDetection: ChangeDetectionStrategy.Eager,
  templateUrl: './header.html',
 })
 export class HeaderComponent {
