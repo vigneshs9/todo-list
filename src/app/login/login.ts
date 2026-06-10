@@ -75,7 +75,6 @@ export class LoginComponent {
       this.navigateToLogin();
      } else {
       Utils.saveToLocalStorage(res.token, Constants.LS_TOKEN);
-      Utils.saveToLocalStorage({ userId: res.userId, name: res.userName, profilePath: res.profilePath }, Constants.LS_LOGIN_DATA);
       setTimeout(() => {
        this.navigateToDashboard();
       }, 1000);
@@ -119,7 +118,7 @@ export class LoginComponent {
    this.messageService.showMessage('Password is required');
    return false;
   }
-  if (!this.isLogin() && !this.signupError()) {
+  if (!this.isLogin() && this.signupError()) {
    this.messageService.showMessage('User with this name already exists. Please choose a different name or login.');
    return false;
   }

@@ -23,6 +23,5 @@ export class Constants {
  static readonly GET_SIGNED_URL = Constants.UPLOAD_ENDPOINT + '/getSignedUrl';
 
  // local storage key
- static readonly LS_LOGIN_DATA = 'loginData';
  static readonly LS_TOKEN = 'lsToken';
 }

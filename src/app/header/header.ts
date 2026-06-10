@@ -24,7 +24,7 @@ export class HeaderComponent {
  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  ngOnInit() {
   if (isPlatformBrowser(this.platformId)) {
-   const loginData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
+   const loginData = Utils.getTokenData() || null;
    this.username.set(loginData?.name || '');
    this.userId.set(loginData?.userId || '');
    this.outsideClick()

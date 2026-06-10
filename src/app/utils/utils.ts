@@ -19,7 +19,6 @@ export class Utils {
   localStorage.removeItem(lsKey);
  }
  static doLogout() {
-  Utils.removeFromLocalStorage(Constants.LS_LOGIN_DATA);
   Utils.removeFromLocalStorage(Constants.LS_TOKEN);
  }
  static convertDMYToYMD(dateStr: string): string {
@@ -29,5 +28,11 @@ export class Utils {
  static convertYMDToDMY(dateStr: string): string {
   const [year, month, day] = dateStr.split('-');
   return `${day}/${month}/${year}`;
+ }
+ static getTokenData(): any {
+  const token = Utils.getFromLocalStorage(Constants.LS_TOKEN);
+  if (!token) return null;
+  const payload = token.split('.')[1];
+  return JSON.parse(atob(payload));
  }
 }

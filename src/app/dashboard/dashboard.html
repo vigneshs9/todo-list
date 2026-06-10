@@ -29,8 +29,7 @@
 
 @if (openTodoModal()) {
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
- <div
-  class="relative bg-white rounded-xl w-full max-w-[450px] max-h-[70vh] flex flex-col overflow-hidden shadow-xl">
+ <div class="relative bg-white rounded-xl w-full max-w-[450px] max-h-[70vh] flex flex-col overflow-hidden shadow-xl">
   <!-- Header -->
   <div class="flex items-center justify-between px-6 py-4 shrink-0">
    <h3 class="text-lg font-semibold">
@@ -73,17 +72,20 @@
      Priority
     </label>
 
-    <app-radio-button [options]="priorityOptions" [selectedValue]="todo.priority" (selectionChange)="todo.priority = $event">
+    <app-radio-button [options]="priorityOptions" [selectedValue]="todo.priority"
+     (selectionChange)="todo.priority = $event">
     </app-radio-button>
    </div>
+  </div>
+  <!-- Footer -->
+  <div class="flex justify-center py-3">
    @if (messageService.message().status) {
    <p [class]="messageService.message().isError ? 'text-sm text-red-600 mt-2' : 'text-sm text-green-600 mt-2'">
     {{ messageService.message().text }}
    </p>
    }
   </div>
-  <!-- Footer -->
-  <div class="flex justify-center gap-3 px-6 py-4 bg-white shrink-0">
+  <div class="flex justify-center gap-3 px-6 py-1 bg-white shrink-0">
    <app-button label="Cancel" variant="tertiary" (clicked)="openTodoModal.set(false)"></app-button>
    <app-button [label]="btnLable()" variant="primary" (clicked)="saveTodo()"></app-button>
   </div>

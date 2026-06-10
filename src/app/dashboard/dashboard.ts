@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) { }
  ngOnInit() {
   if (isPlatformBrowser(this.platformId)) {
-   this.loginData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
+   this.loginData = Utils.getTokenData() || null;
   }
   this.setupTable();
   if (this.loginData?.userId) {
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
      const priorityObj = this.priorityOptions.find((p: any) => p.value === todo.priority);
      todo.priorityLabel = priorityObj ? priorityObj.label : '';
      todo.priorityClass = priorityObj ? priorityObj.class : '';
-     const isOverdue = new Date(todo.todoDate) < new Date() && todo.taskStatus !== 3;
+     const isOverdue = Utils.getYMD() > Utils.getYMD(todo.todoDate) && todo.taskStatus !== 3;
      if (isOverdue) {
       todo.taskStatusLabel = 'Overdue';
       todo.taskStatusClass = 'inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold bg-red-100 text-red-800 border border-red-200';

@@ -19,7 +19,7 @@ export class ChangePasswordComponent implements OnInit {
  private readonly api = inject(ApiManager);
  public readonly messageService = inject(MessageService);
  ngOnInit() {
-  const userData = Utils.getFromLocalStorage(Constants.LS_LOGIN_DATA);
+  const userData = Utils.getTokenData() || null;
   this.postParams.name = userData?.name;
  }
  closeChangePassword(isDashboard = false) {
