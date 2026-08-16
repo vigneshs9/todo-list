@@ -33,6 +33,10 @@ export class Utils {
   const token = Utils.getFromLocalStorage(Constants.LS_TOKEN);
   if (!token) return null;
   const payload = token.split('.')[1];
-  return JSON.parse(atob(payload));
+  const tokenData = JSON.parse(atob(payload));
+  if (tokenData) {
+   tokenData['userId'] = tokenData['_id'];
+  }
+  return tokenData;
  }
 }
