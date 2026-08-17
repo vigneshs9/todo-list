@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://vign-todo-list.vercel.app/'
+  apiUrl: 'http://localhost/todo-node/'
+    // apiUrl: 'https://vign-todo-list.vercel.app/'
 };

@@ -22,6 +22,6 @@ export class ApiManager {
   return this.http.get(url).pipe(map((res: any) => this.crypto.decrypt(res?.['payload'])));
  }
  uploadFile(url: string, file: File) {
-  return this.http.put(url, this.crypto.encryptedPayload(file), { headers: { 'Content-Type': file.type } }).pipe(map((res: any) => this.crypto.decrypt(res?.['payload'])));
+  return this.http.put(url, file, { headers: { 'Content-Type': file.type }, responseType: 'text' })
  }
 }

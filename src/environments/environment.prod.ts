@@ -1,4 +1,5 @@
+const origin = window.location.origin
 export const environment = {
   production: true,
-  apiUrl: 'https://vign-todo-list.vercel.app/'
+  apiUrl: `${origin}/todo-node/`
 };
