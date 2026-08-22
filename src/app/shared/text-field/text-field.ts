@@ -38,9 +38,7 @@ export class TextFieldComponent implements OnChanges {
   this.valueChange.emit(input.value);
  }
  onInput(event: Event) {
-  console.log('Type:', this.type);
   const input = event.target as HTMLInputElement;
-  // this.updateValidationError(input);
   this.inputValueChange.emit(input.value);
   this.valueChange.emit(input.value);
  }
