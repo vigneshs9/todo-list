@@ -1,14 +1,14 @@
-<div class="flex flex-col gap-1">
- <label class="text-sm font-medium text-gray-700">
+<fieldset class="flex flex-col gap-1">
+ <legend class="text-sm font-medium text-gray-700">
   {{ label }}
- </label>
+ </legend>
 
- <input [type]="type" [placeholder]="placeholder" [value]="value" [disabled]="disabled" (blur)="onBlur($event)" (input)="onInput($event)" class="px-3 py-2 border rounded-lg outline-none transition
+ <input [type]="type" [pattern]="validationPattern() || null" [placeholder]="placeholder" [value]="value" [disabled]="disabled" (blur)="onBlur($event)" (input)="onInput($event)" class="px-3 py-2 border rounded-lg outline-none transition
    focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed" />
 
- @if (error) {
+ @if (error || validationError()) {
  <p class="text-sm text-red-500">
-  {{ error }}
+  {{ error || validationError() }}
  </p>
  }
-</div>
+</fieldset>
