@@ -29,7 +29,7 @@ export class TextFieldComponent implements OnChanges {
   if (changes['regex'] || changes['type']) {
    this.validationPattern.set(this.regex || this.typePatterns[this.type] || '');
    this.validationError.set('');
-  } 
+  }
  }
 
  onBlur(event: Event) {
@@ -42,31 +42,31 @@ export class TextFieldComponent implements OnChanges {
   const input = event.target as HTMLInputElement;
   // this.updateValidationError(input);
   this.inputValueChange.emit(input.value);
-   this.valueChange.emit(input.value);
+  this.valueChange.emit(input.value);
  }
 
  private updateValidationError(input: HTMLInputElement): void {
-   if (this.type === 'text' && !this.regex) {
-    this.validationError.set('');
-    return;
+  if (this.type === 'text' && !this.regex) {
+   this.validationError.set('');
+   return;
   }
   if (!input.value) {
-      this.validationError.set('');
-      return;
-    }
-   const pattern = this.validationPattern();
+   this.validationError.set('');
+   return;
+  }
+  const pattern = this.validationPattern();
 
   if (!pattern) {
-    this.validationError.set('');
-    return;
+   this.validationError.set('');
+   return;
   }
 
   if (input.validity.patternMismatch) {
-    this.validationError.set(`Please enter a valid ${this.type}.`);
+   this.validationError.set(`Please enter a valid ${this.type}.`);
   } else if (input.validity.typeMismatch) {
-    this.validationError.set(`Please enter a valid ${this.type}.`);
+   this.validationError.set(`Please enter a valid ${this.type}.`);
   } else {
-    this.validationError.set('');
+   this.validationError.set('');
   }
  }
 }
